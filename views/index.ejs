@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
+    <title>UPS System</title>
+</head>
+<body>
+    <nav class="navbar navbar-expand-lg" style="background-color:#490e0e;">
+       <div class="container">
+        <a class="navbar-brand text-white" href="#">MTP COMPANY</a>
+       </div>
+    </nav>
+
+    <header class="py-5 bg-light">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    <h1> About MTP UnInterruptible Power Supply</h1>
+                    <p class="lead">
+                        In MTP UnInterruptible Power Supply, we developed an innovative solution for monitoring UPS remotely, 
+                        which provides information on battery voltage, and the working condition of the UPS Load using a website. 
+                        As a result of these data, we are able to monitor and identify the location of faulty UPS and plan our teams accordingly in order to rectify them. 
+                        By using this technology, we can reduce the daily inspection of UPS.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </header>
+    <!-- <div class="row ">
+       <div class="col-lg-3 col-md-3 col-sm3 mx-auto">
+       <img src="/images/ups.jpg" alt="Device Image" class="img-fluid container "> 
+       <p class="text-center"></p>
+    </div>  -->
+    <div class="py-5 bg-light">
+        <div class="container">
+            <h2>UPS Status</h2>
+            <div class="table-responsive">
+                <table class="table table-striped table-sm">
+                     <thead>
+                        <tr>
+                           
+                           <th>Status</th> 
+                           <th>Last Online</th> 
+                           <th>Battery</th> 
+                           <th>gateOpenCount</th> 
+                        </tr>
+                    </thead>
+                    <tbody id="result">
+                        <tr>
+                           
+                            <th><span id="status"></span></th> 
+                            <th><span id="lastonline"></span></th> 
+                            <th><span id="battery"></span></th> 
+                            <th><span id="gateOpenCount"></span></th> 
+                         </tr>
+                         <!-- <tr>
+                            <th><span class="id"></span></th> 
+                            <th><span class="status"></span></th> 
+                            <th><span class="lastonline"></span></th> 
+                            <th><span class="battery"></span></th> 
+                            <th><span class="load"></span></th> 
+                         </tr> -->
+                    </tbody>
+
+                </table>
+                
+            </div>
+        </div>
+    </div>
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      const socket = io();
+  
+      socket.on('updateData', (data) => {
+       //for(let i=0;i<=1;i++)
+       {
+        document.getElementById('gateOpenCount').innerHTML = (data[0].gateOpenCount);
+       
+       
+        document.getElementById('status').innerHTML = data[0].status== "Online" ? "Online" : "Offline";
+        document.getElementById('status').style.color = data[0].status == "Online" ? "green" : "red";
+        document.getElementById('lastonline').innerHTML = data[0].lastonline;
+        if(isNaN((data[0].battery)))
+            {
+                data[0].battery="0";
+            }
+            var v = parseFloat(data[0].battery);
+            console.log(v);
+            document.getElementById('battery').innerHTML = v !== null ? v + ' V' : 'invalid ';
+           document.getElementById('battery').style.color = data[0].battery <= 10.5 ? "red" : "green";  
+
+       }
+
+            
+      });
+      
+    </script>
+  
+
+</body>
+
+</html>
