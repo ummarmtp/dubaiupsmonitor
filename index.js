@@ -4,8 +4,8 @@ const http = require('http');
 const socketIo = require('socket.io');
 const mongoose = require('mongoose');
 // MongoDB connection
-  mongoose.connect("mongodb+srv://ummarrahil:06031998Rahil@cluster0.7baglhg.mongodb.net/dubaiups?retryWrites=true&w=majority&appName=Cluster0").then(()=>{
-  //mongoose.connect("mongodb://127.0.0.1:27017/dubaiups").then(()=>{
+  //mongoose.connect("mongodb+srv://ummarrahil:06031998Rahil@cluster0.7baglhg.mongodb.net/dubaiups?retryWrites=true&w=majority&appName=Cluster0").then(()=>{
+  mongoose.connect("mongodb://127.0.0.1:27017/dubaiups").then(()=>{
   console.log("mongodb connected")
   initializeData();
 }).catch((error)=>console.log(error));
@@ -102,7 +102,7 @@ app.get('/user', async(req, res) => {
 });
 
 app.get('/history', async (req, res) => {
-  const history = await historyModel.find();
+  const history = await historyModel.find().sort({ timestamp: 1 });
   res.json(history);
 });
 

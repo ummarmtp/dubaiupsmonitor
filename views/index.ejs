@@ -65,12 +65,18 @@
                     </tbody>
 
                 </table>
+
+                <canvas id="batteryChart"></canvas>
                 
             </div>
         </div>
     </div>
 
     <script src="/socket.io/socket.io.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+ <script src="https://cdn.jsdelivr.net/npm/chartjs-plugin-zoom"></script>
+    
     <script>
       const socket = io();
   
@@ -96,6 +102,64 @@
 
             
       });
+
+
+      ////chart
+      async function fetchData() {
+    const response = await fetch('/history');
+    const data = await response.json();
+
+    // Convert timestamps to Date objects and sort by date
+    data.sort((a, b) => new Date(a.timestamp) - new Date(b.timestamp));
+
+    const timestamps = data.map(entry => 
+        new Date(entry.timestamp).toLocaleString('en-GB', { 
+            day: '2-digit', month: '2-digit', year: 'numeric', 
+            hour: '2-digit', minute: '2-digit', second: '2-digit' 
+        })
+    );
+    const batteryLevels = data.map(entry => parseFloat(entry.battery));
+
+    const ctx = document.getElementById('batteryChart').getContext('2d');
+    new Chart(ctx, {
+        type: 'line',
+        data: {
+            labels: timestamps,
+            datasets: [{
+                label: 'Battery Voltage',
+                data: batteryLevels,
+                borderColor: 'blue',
+                backgroundColor: 'rgba(0, 0, 255, 0.2)',
+                fill: true
+            }]
+        },
+        options: {
+            responsive: true,
+            plugins: {
+                legend: {
+                    display: false // Hides the legend
+                }
+            },
+            scales: {
+                x: { 
+                    title: { display: true, text: 'Time' },
+                    ticks: { autoSkip: true, maxTicksLimit: 10 } // Limits the number of x-axis labels for readability
+                },
+                y: { 
+                    title: { display: true, text: 'Battery Voltage' },
+                    suggestedMin: 8, // Minimum Y-axis value
+                    suggestedMax: 14, // Maximum Y-axis value
+                    ticks: {
+                        stepSize: 2 // Controls the space between each tick
+                    }
+                }
+            }
+        }
+    });
+}
+
+fetchData();
+
       
     </script>
   
