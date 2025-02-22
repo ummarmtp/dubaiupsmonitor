@@ -126,7 +126,7 @@ async function updateLastseen()
  
  
     console.log();
-    if(secound[0]>=1)
+    if(secound[0]>=60)
       {
         console.log("hello");
         console.log(secound[0]);
