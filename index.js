@@ -22,7 +22,14 @@ const deviceData = new mongoose.Schema({
 
 );
 
+const historySchema = new mongoose.Schema({
+  battery: String,
+  gateOpenCount: String,
+  timestamp: Date
+});
+
 const userModel=mongoose.model("data",deviceData);
+const historyModel = mongoose.model("history", historySchema);
 
 const { time } = require('console');
 process.env.TZ = 'Asia/Dubai'
@@ -68,6 +75,13 @@ app.post('/data', async (req, res) => {
     
     //const newSensorData = new userModel(sensorData);
     await userModel.updateOne({id:"0"},{ $set: sensorData[0]}, { upsert: true });
+    await historyModel.create({
+      id: "0",
+      battery: req.body.battery,
+      gateOpenCount: req.body.gateOpenCount,
+      timestamp: new Date()
+  });
+    
   }
   else
   {
@@ -85,6 +99,11 @@ app.get('/', async(req, res) => {
 app.get('/user', async(req, res) => {
   const data=await userModel.find();
   res.json(data);
+});
+
+app.get('/history', async (req, res) => {
+  const history = await historyModel.find();
+  res.json(history);
 });
 
 
