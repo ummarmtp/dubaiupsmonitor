@@ -5,7 +5,22 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.2/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-T3c6CoIi6uLrA9TneNEoa7RxnatzjcDSCmG1MXxSR1GAsXEV/Dwwykc2MPK8M2HN" crossorigin="anonymous">
     <title>UPS System</title>
+    <style>
+        /* Make the chart container horizontally scrollable */
+        .chart-container {
+          width: 100%;
+          overflow-x: auto;
+          padding-bottom: 10px; /* Ensure there's space for scroll */
+          position: relative;
+        }
+      
+        canvas {
+          width: 2000px; /* Set a large width for the chart */
+          height: 400px; /* Adjust height as needed */
+        }
+      </style>
 </head>
+
 <body>
     <nav class="navbar navbar-expand-lg" style="background-color:#490e0e;">
        <div class="container">
@@ -66,7 +81,9 @@
 
                 </table>
 
-                <canvas id="batteryChart"></canvas>
+                <div class="chart-container">
+                    <canvas id="batteryChart"></canvas>
+                </div>
                 
             </div>
         </div>
@@ -99,6 +116,7 @@
            document.getElementById('battery').style.color = data[0].battery <= 10.5 ? "red" : "green";  
 
        }
+       fetchData();
 
             
       });
@@ -114,8 +132,7 @@
 
     const timestamps = data.map(entry => 
         new Date(entry.timestamp).toLocaleString('en-GB', { 
-            day: '2-digit', month: '2-digit', year: 'numeric', 
-            hour: '2-digit', minute: '2-digit', second: '2-digit' 
+            hour: '2-digit', minute: '2-digit' // Only show hour and minute
         })
     );
     const batteryLevels = data.map(entry => parseFloat(entry.battery));
@@ -139,11 +156,18 @@
                 legend: {
                     display: false // Hides the legend
                 }
+               
             },
             scales: {
                 x: { 
                     title: { display: true, text: 'Time' },
-                    ticks: { autoSkip: true, maxTicksLimit: 10 } // Limits the number of x-axis labels for readability
+                    ticks: { 
+                        autoSkip: true, maxTicksLimit: 100 // Ensure all labels fit horizontally
+                    },
+                    offset: true, // Make sure the labels don’t overlap with the chart
+                    grid: {
+                        display: false // Hide gridlines on the x-axis
+                    }
                 },
                 y: { 
                     title: { display: true, text: 'Battery Voltage' },
@@ -152,6 +176,14 @@
                     ticks: {
                         stepSize: 2 // Controls the space between each tick
                     }
+                }
+            },
+            layout: {
+                padding: {
+                    left: 10,
+                    right: 10,
+                    top: 10,
+                    bottom: 10
                 }
             }
         }
