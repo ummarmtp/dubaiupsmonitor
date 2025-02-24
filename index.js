@@ -126,11 +126,11 @@ async function updateLastseen()
  
  
     console.log();
-    if(secound[0]>=60)
+    if(secound[0]>=4)
       {
         console.log("hello");
         console.log(secound[0]);
-        secound[0]=61;
+        secound[0]=5;
         sensorData[0].status ="Offline";
         sensorData[0].lastonline=dateAndtimeString();
         sensorData[0].lastDate=lastseen[0];
