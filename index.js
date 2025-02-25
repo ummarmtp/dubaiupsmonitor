@@ -27,7 +27,7 @@ const historySchema = new mongoose.Schema({
   battery: String,
   gateOpenCount: String,
   timestamp: Date,
-  loadVoltage: [{ type: String }] 
+  loadVoltage: String
 });
 
 const userModel=mongoose.model("data",deviceData);
@@ -57,7 +57,7 @@ let sensorData =[ {
   status:"OFFLINE",
   lastonline:"",
   lastDate:new Date(),
-  loadVoltage: []
+  loadVoltage:""
 }];
 
 var m=true;
@@ -73,7 +73,7 @@ app.post('/data', async (req, res) => {
     lastseen[0]=new Date();
     sensorData[0].lastDate=lastseen[0];
     sensorData[0].lastonline=dateAndtimeString();
-    sensorData[0].loadVoltage = req.body.loadVoltage;
+    //sensorData[0].loadVoltage =  req.body.loadVoltage.map(Number);;
     sensorData[0].status="Online";
     
     
@@ -83,6 +83,7 @@ app.post('/data', async (req, res) => {
       id: "0",
       battery: req.body.battery,
       gateOpenCount: req.body.gateOpenCount,
+      loadVoltage:req.body.loadVoltage,
       timestamp: new Date()
   });
     
