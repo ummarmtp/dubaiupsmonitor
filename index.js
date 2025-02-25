@@ -27,7 +27,7 @@ const historySchema = new mongoose.Schema({
   battery: String,
   gateOpenCount: String,
   timestamp: Date,
-  loadVoltage: String
+  loadCurrent: String
 });
 
 const userModel=mongoose.model("data",deviceData);
@@ -83,7 +83,7 @@ app.post('/data', async (req, res) => {
       id: "0",
       battery: req.body.battery,
       gateOpenCount: req.body.gateOpenCount,
-      loadVoltage:req.body.loadVoltage,
+      loadCurrent:req.body.loadVoltage,
       timestamp: new Date()
   });
     
