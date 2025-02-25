@@ -3,6 +3,10 @@ const bodyParser = require('body-parser');
 const http = require('http');
 const socketIo = require('socket.io');
 const mongoose = require('mongoose');
+
+const moment = require('moment-timezone');
+
+const getUaeTime = () => moment().tz("Asia/Dubai").toDate();
 // MongoDB connection
   mongoose.connect("mongodb+srv://ummarrahil:06031998Rahil@cluster0.7baglhg.mongodb.net/dubaiups?retryWrites=true&w=majority&appName=Cluster0").then(()=>{
   //mongoose.connect("mongodb://127.0.0.1:27017/dubaiups").then(()=>{
@@ -84,7 +88,7 @@ app.post('/data', async (req, res) => {
       battery: req.body.battery,
       gateOpenCount: req.body.gateOpenCount,
       loadCurrent:req.body.loadVoltage,
-      timestamp: new Date()
+      timestamp: getUaeTime()
   });
     
   }
