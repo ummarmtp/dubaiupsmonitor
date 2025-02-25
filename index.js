@@ -4,7 +4,7 @@ const http = require('http');
 const socketIo = require('socket.io');
 const mongoose = require('mongoose');
 
-const moment = require('moment-timezone');
+//const moment = require('moment-timezone');
 
 const getUaeTime = () => moment().tz("Asia/Dubai").toDate();
 // MongoDB connection
